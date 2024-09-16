@@ -9,11 +9,10 @@ Component({
       type: String,
       value: ''
     },
-
     // 传递的列表数据
     list: {
       type: Array,
-      value: [{}, {}, {}]
+      value: []
     }
   },
 

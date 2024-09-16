@@ -27,7 +27,8 @@
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
-    }
+    },
+    "compileWorklet": true
   },
   "condition": {},
   "editorSetting": {
@@ -35,5 +36,6 @@
     "tabSize": 2
   },
   "appid": "wxbf0d17449ad8e0ae",
-  "srcMiniprogramRoot": "miniprogram/"
+  "srcMiniprogramRoot": "miniprogram/",
+  "simulatorPluginLibVersion": {}
 }

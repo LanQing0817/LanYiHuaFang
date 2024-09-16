@@ -8,21 +8,27 @@ Component({
     // 轮播图数据
     bannerList: {
       type: Array,
-      value: [
-        '../../../assets/banner/banner-1.jpg',
-        '../../../assets/banner/banner-2.jpg',
-        '../../../assets/banner/banner-3.jpg'
-      ]
+      value: []
     }
   },
 
   /**
    * 组件的初始数据
    */
-  data: {},
+  data: {
+    activeIndex:0 //被激活的轮播图索引，默认是0
+  },
 
   /**
    * 组件的方法列表
    */
-  methods: {}
+  methods: {
+    // 获取被激活的轮播图索引
+    getSwiperIndex(event){
+      const {current}=event.detail
+      this.setData({
+        activeIndex:current
+      })
+    }
+  }
 })

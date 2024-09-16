@@ -1,15 +1,13 @@
 <!--components/goods-list/goods-list.wxml-->
 
 <!-- 商品列表组件 -->
-<view class="goods_container">
+<view class="goods_container" wx:if="{{list.length}}">
   <!-- 标题 -->
   <view class="goods_title">{{title}}</view>
 
   <!-- 列表区域 -->
   <view class="goods_card_list">
-    <block wx:for="{{ 3 }}" wx:key="index">
-      <goods-card></goods-card>
-    </block>
+      <goods-card wx:for="{{ list }}" wx:key="id" goodItem="{{item}}"></goods-card>
   </view>
 
   <!-- 查看更多 -->
