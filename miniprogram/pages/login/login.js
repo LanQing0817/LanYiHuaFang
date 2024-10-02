@@ -32,7 +32,9 @@ ComponentWithStore({
             //将数据存储到store对象中
             this.setToken(data.token)
             // 获取用户信息
-+           this.getUserInfo()  
+           this.getUserInfo()
+            // 返回上一级页面
+           wx.navigateBack() 
           } else {
             // 登陆失败后给用户进行提示
             toast({
