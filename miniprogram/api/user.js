@@ -9,3 +9,10 @@ export const reqLogin = (code) => {
   return http.get(`/mall-api/weixin/wxLogin/${code}`)
 }
 
+/**
+ * @description 获取用户信息
+ * @returns Promise
+ */
+export const reqUserInfo = () => {
+  return http.get(`/mall-api/weixin/getuserInfo`)
+}

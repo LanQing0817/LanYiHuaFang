@@ -1,9 +1,9 @@
 import {
-  reqLogin
+  reqLogin,reqUserInfo
 } from '../../api/user'
 import {
   userStore
-} from '../../store/index.js'
+} from '../../stores/userStore.js'
 import {
   ComponentWithStore
 } from 'mobx-miniprogram-bindings'
@@ -12,8 +12,8 @@ import {setStorage} from '../../utils/storage'
 ComponentWithStore({
   storeBindings: {
     store: userStore,
-    fields: ['token'],
-    actions: ['setToken']
+    fields: ['token','userInfo'],
+    actions: ['setToken','setUserInfo']
   },
   methods: {
     // 点击登录
@@ -30,7 +30,9 @@ ComponentWithStore({
             // 登陆成功以后，需要将token存储到本地
             setStorage('token', data.token)
             //将数据存储到store对象中
-            this.setToken(data.token)  
+            this.setToken(data.token)
+            // 获取用户信息
++           this.getUserInfo()  
           } else {
             // 登陆失败后给用户进行提示
             toast({
@@ -39,6 +41,14 @@ ComponentWithStore({
           }
         }
       }) 
+    },
+    // 获取用户信息
+    async getUserInfo() {
+      const { data } = await reqUserInfo()
+      // 将用户信息存储到本地
+      setStorage('userInfo', data)
+      // 将用户信息存储到 Store
++     this.setUserInfo(data)
     }
   }
 

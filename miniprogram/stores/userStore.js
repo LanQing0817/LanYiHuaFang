@@ -7,8 +7,14 @@ import {getStorage} from '../utils/storage'
 export const userStore=observable({
   // 创建可观察状态token
   token:getStorage('token')||'',
+  // 用户信息
+  userInfo:wx.getStorageSync('userInfo')||{},
   // 对token进行修改
   setToken:action(function (token){
     this.token=token
+  }),
+  // 设置用户信息
+  setUserInfo:action(function(userInfo){
+    this.userInfo=userInfo
   })
 })
