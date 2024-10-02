@@ -3,7 +3,7 @@
     <text>头像</text>
 
     <view class="avatar">
-      <button hover-class="none">
+      <button hover-class="none" open-type="chooseAvatar" bindchooseavatar="chooseAvatar">
         <image src="{{ userInfo.headimgurl || '/assets/images/avatar.png' }}" />
       </button>
     </view>
@@ -15,7 +15,7 @@
   </view>
 
   <view class="footer">
-    <view class="btn">保存</view>
+    <view class="btn" bind:tap="updateUserInfo">保存</view>
   </view>
 
   <van-dialog
@@ -27,11 +27,13 @@
     showCancelButton="{{ false }}"
     transition="fade"
   >
-    <form>
-      <input class="input-name" value="{{ userInfo.nickname }}" />
+    <form bindsubmit="getNewName">
+    <!-- type设置为nickname 是为了获取微信昵称 -->
+      <input class="input-name" type="nickname" bindinput="getNewName" name="nickname" value="{{ userInfo.nickname }}" />
       <view class="dialog-content">
         <button class="cancel" bindtap="cancelForm">取消</button>
-        <button class="confirm" type="primary">确定</button>
+        <!-- 将formType设置为submit 当用户点击确定后，触发form表单的bindsubmit事件 -->
+        <button class="confirm" type="primary" formType="submit">确定</button>
       </view>
     </form>
   </van-dialog>
