@@ -30,7 +30,7 @@
         </view>
       </view>
       <view class="setting">
-        <navigator url="/pages/settings/settings"> 设置 </navigator>
+        <navigator url="/pages/settings/settings" wx:if="{{ token }}"> 设置 </navigator>
       </view>
     </view>
 

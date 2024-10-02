@@ -1,3 +1,5 @@
+<!--pages/address/list/index.wxml-->
+
 <view class="container address-list">
   <view class="list-warpper" wx:if="{{ addressList.length }}">
     <view wx:for="{{ addressList }}" wx:key="index" class="list-item">

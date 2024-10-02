@@ -1,7 +1,7 @@
 <view class="container">
   <view class="setting-list">
     <navigator
-      url="/pages/profile/profile"
+      url="/modules/settingModule/pages/profile/profile"
       hover-class="none"
       class="setting-item"
     >
@@ -12,7 +12,7 @@
   <!-- 操作列表 -->
   <view class="setting-list">
     <navigator
-      url="/pages/address/list/index"
+      url="/modules/settingModule/pages/address/list/index"
       hover-class="none"
       class="setting-item"
     >
