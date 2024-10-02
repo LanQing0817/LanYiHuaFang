@@ -11,7 +11,7 @@
 
   <view class="setting-list nickname" bindtap="onUpdateNickName">
     <text>昵称</text>
-    <text>{{ userInfo.nickname || '尚硅谷' }}</text>
+    <text>{{ userInfo.nickname || '兰艺' }}</text>
   </view>
 
   <view class="footer">
