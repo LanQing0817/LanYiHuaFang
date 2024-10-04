@@ -62,7 +62,7 @@
             <!-- 步进器组件控制购买数量 -->
             <view class="buy-btn" wx:if="{{buyNow===0}}">
               <!-- Stepper 步进器，由增加按钮、减少按钮和输入框组成，控制购买数量 -->
-              <van-stepper value="{{ count }}" bind:change="onChangeGoodsCount" />
+              <van-stepper value="{{ count }}" integer min="1" max="200" bind:change="onChangeGoodsCount" />
             </view>
           </view>
         </view>
@@ -82,7 +82,7 @@
 
       <!-- 确定按钮 -->
       <view class="sheet-footer-btn">
-        <van-button block type="primary" round> 确定 </van-button>
+        <van-button block type="primary" round bind:tap="handleSubmit"> 确定 </van-button>
       </view>
     </view>
   </van-action-sheet>

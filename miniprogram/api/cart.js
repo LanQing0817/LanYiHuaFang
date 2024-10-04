@@ -14,7 +14,7 @@ export const reqCartList = () => {
  * @returns Promise
  */
 export const reqAddCart = (data) => {
-  return http.get(`/cart/addToCart/${data.goodsId}/${data.count}`, data)
+  return http.get(`/mall-api/cart/addToCart/${data.goodsId}/${data.count}`, data)
 }
 
 /**
@@ -24,7 +24,7 @@ export const reqAddCart = (data) => {
  * @returns Promise
  */
 export const reqUpdateChecked = (goodsId, isChecked) => {
-  return http.get(`/cart/checkCart/${goodsId}/${isChecked}`)
+  return http.get(`/mall-api/cart/checkCart/${goodsId}/${isChecked}`)
 }
 
 /**
@@ -33,7 +33,7 @@ export const reqUpdateChecked = (goodsId, isChecked) => {
  * @returns Promise
  */
 export const reqCheckAllCart = (isChecked) => {
-  return http.get(`/cart/checkAllCart/${isChecked}`)
+  return http.get(`/mall-api/cart/checkAllCart/${isChecked}`)
 }
 
 /**
@@ -42,5 +42,5 @@ export const reqCheckAllCart = (isChecked) => {
  * @returns Promise
  */
 export const reqDelCart = (goodsId) => {
-  return http.get(`/cart/delete/${goodsId}`)
+  return http.get(`/mall-api/cart/delete/${goodsId}`)
 }
