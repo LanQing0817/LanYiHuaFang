@@ -5,12 +5,28 @@ import {
   userStore
 } from '@/stores/userStore'
 import {
-  reqCartList, reqUpdateChecked
+  reqCartList,
+  reqUpdateChecked,
+  reqCheckAllCart
 } from '@/api/cart'
+
+const computedBehavior = require('miniprogram-computed').behavior
+
 ComponentWithStore({
   storeBindings: {
     store: userStore,
     fields: ['token']
+  },
+  behaviors: [computedBehavior],
+  computed: {
+    // 判断是否全选
+    // computed 函数中不能访问 this ，只有 data 对象可供访问
+    // 这个函数的返回值会被设置到 this.data.selectAllStatus 字段中
+    selectAllStatus(data) {
+      return (
+        data.cartList.length !== 0 && data.cartList.every((item) => item.isChecked === 1)
+      )
+    }
   },
   // 组件的初始数据
   data: {
@@ -48,9 +64,14 @@ ComponentWithStore({
     // 切换商品的选中状态
     async updateChecked(event) {
       // 获取最新的选中状态
-      const { detail } = event
+      const {
+        detail
+      } = event
       // 获取商品的索引和 id
-      const { id, index } = event.target.dataset
+      const {
+        id,
+        index
+      } = event.target.dataset
       // 将最新的状态格式化成后端所需要的数据格式
       const isChecked = detail ? 1 : 0
 
@@ -67,7 +88,26 @@ ComponentWithStore({
     onShow() {
       console.log('购物车onshow-----')
       this.showTipGetList()
+    },
+    async changeAllStatus(event) {
+      // 获取全选和全不选的状态
+      const isChecked = event.detail ? 1 : 0
+      // 调用接口，更新服务器中商品的状态
+      const res = await reqCheckAllCart(isChecked)
+
+      // 如果更新成功，需要将本地的数据一同改变
+      if (res.code === 200) {
+        // 将数据进行拷贝
+        const newCart = JSON.parse(JSON.stringify(this.data.cartList))
+        // 将数据进行更改
+        newCart.forEach((item) => (item.isChecked = isChecked))
+
+        // 进行赋值
+        this.setData({
+          cartList: newCart
+        })
+      }
     }
   },
-  
+
 })

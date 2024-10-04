@@ -54,6 +54,6 @@
     button-text="去结算"
     tip="{{ true }}"
   >
-    <van-checkbox value="{{ true }}" checked-color="#FA4126"> 全选 </van-checkbox>
+    <van-checkbox value="{{ selectAllStatus }}" checked-color="#FA4126" bind:change="changeAllStatus"> 全选 </van-checkbox>
   </van-submit-bar>
 </view>
