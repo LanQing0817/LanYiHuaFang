@@ -7,7 +7,8 @@ Page({
     goodsInfo: {}, // 商品详情
     show: false, // 控制加入购物车和立即购买弹框的显示
     count: 1, // 商品购买数量，默认是 1
-    blessing: '' // 祝福语
+    blessing: '', // 祝福语
+    buyNow:'' //是否立即购买
   },
   // 获取商品的想起
   async getGoodsInfo() {
@@ -22,13 +23,15 @@ Page({
   // 加入购物车
   handleAddcart() {
     this.setData({
-      show: true
+      show: true,
+      buyNow:0
     })
   },
   // 立即购买
   handeGotoBuy() {
     this.setData({
-      show: true
+      show: true,
+      buyNow:1
     })
   },
   // 点击关闭弹框时触发的回调
