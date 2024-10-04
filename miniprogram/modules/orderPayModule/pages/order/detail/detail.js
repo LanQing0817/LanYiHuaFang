@@ -3,6 +3,7 @@ import {
   reqOrderInfo,
   reqBuyNowGoods
 } from '@/api/orderpay'
+import Schema from 'async-validator'
 import { formatTime } from '../../../../../utils/formatTime.js'
 const app = getApp()
 Page({
@@ -12,12 +13,80 @@ Page({
     deliveryDate: '选择送达日期', // 期望送达日期
     blessing: '', // 祝福语
     show: false, // 期望送达日期弹框
-    minDate: new Date().getTime(),
-    currentDate: new Date().getTime(),
     orderAddress: {}, //收货地址
     orderInfo: {}, // 订单商品详情
+    minDate: new Date().getTime(),
+    currentDate: new Date().getTime()
+  },
+  async submitOrder() {
+    // 从 data 中结构数据
+    const {
+      buyName,
+      buyPhone,
+      deliveryDate,
+      blessing,
+      orderInfo,
+      orderAddress
+    } = this.data
+
+    // 组织请求参数
+    const params = {
+      buyName,
+      buyPhone,
+      deliveryDate,
+      remarks: blessing,
+      cartList: orderInfo.cartVoList,
+      userAddressId: orderAddress.id
+    }
+
+    // 对请求参数进项验证
+    const { valid } = await this.validatorPerson(params)
+
+    // 打印验证结果
+    console.log(valid)
   },
 
+  // 对新增收货地址请求参数进行验证
+  validatorPerson(params) {
+    // 验证收货人，是否只包含大小写字母、数字和中文字符
+    const nameRegExp = '^[a-zA-Z\\d\\u4e00-\\u9fa5]+$'
+
+    // 验证手机号，是否符合中国大陆手机号码的格式
+    const phoneReg = '^1(?:3\\d|4[4-9]|5[0-35-9]|6[67]|7[0-8]|8\\d|9\\d)\\d{8}$'
+
+    // 创建验证规则
+    const rules = {
+      userAddressId: [{ required: true, message: '请选择收货地址' }],
+      buyName: [
+        { required: true, message: '请输入收货人姓名' },
+        { pattern: nameRegExp, message: '收货人姓名不合法' }
+      ],
+      buyPhone: [
+        { required: true, message: '请输入收货人手机号' },
+        { pattern: phoneReg, message: '收货人手机号不合法' }
+      ],
+      deliveryDate: { required: true, message: '请选择送达时间' }
+    }
+
+    // 传入验证规则进行实例化
+    const validator = new Schema(rules)
+
+    // 调用实例方法对请求参数进行验证
+    // 注意：我们希望将验证结果通过 Promise 的形式返回给函数的调用者
+    return new Promise((resolve) => {
+      validator.validate(params, (errors) => {
+        if (errors) {
+          // 如果验证失败，需要给用户进行提示
+          wx.toast({ title: errors[0].message })
+          // 如果属性值是 false，说明验证失败
+          resolve({ valid: false })
+        } else {
+          // 如果属性值是 true，说明验证成功
+          resolve({ valid: true })
+        }
+      })
+    })
+  },
   // 选择期望送达日期
   onShowDateTimerPopUp() {
     this.setData({

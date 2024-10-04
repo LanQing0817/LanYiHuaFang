@@ -95,7 +95,7 @@
   <!-- 支付区域 -->
   <view class="footer detail-flex">
     <view class="left"> ¥{{orderInfo.totalAmount}} </view>
-    <viwe class="right">提交订单</viwe>
+    <viwe class="right" bind:tap="submitOrder">提交订单</viwe>
   </view>
 
   <van-popup
