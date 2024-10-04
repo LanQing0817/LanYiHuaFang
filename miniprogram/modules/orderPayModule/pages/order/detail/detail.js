@@ -45,6 +45,20 @@ Page({
   },
   // 获取收货地址
   async getAddress() {
+
+    // 如果 globalData 存在收货地址，取出收货地址
+    if (app.globalData.address.id) {
+      this.setData({
+        orderAddress: app.globalData.address
+      })
+
+      // 在赋值以后需要将收货地址清空
+      app.globalData.address = {}
+
+      return
+    }
+
+    // 如果 globalData 中不存在收货地址，获取收货地址渲染即可
     const {
       data: orderAddress
     } = await reqOrderAddress()

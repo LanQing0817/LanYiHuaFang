@@ -4,15 +4,15 @@
       <van-swipe-cell right-width="{{ 65 }}">
         <van-cell-group border="{{ false }}">
           <view class="list-item-box">
-            <view class="info">
+            <view class="info" bind:tap="changeAddress" data-id="{{item.id}}">
               <view class="user-info">
-                <text>测试用户</text>
-                <text>176****5678</text>
-                <text class="default-tag">默认</text>
+                <text>{{item.name}}</text>
+                <text>{{item.phone}}</text>
+                <text wx:if="{{item.isDefault===1}}" class="default-tag">默认</text>
               </view>
 
               <view class="address-info">
-                甘肃省甘南藏族自治州碌曲县松日鼎盛大厦0层
+                {{item.fullAddress}}
               </view>
             </view>
 
