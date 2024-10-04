@@ -1,10 +1,14 @@
 import {
   reqOrderAddress,
   reqOrderInfo,
-  reqBuyNowGoods
+  reqBuyNowGoods,
+  reqSubmitOrder,
+  reqPreBuyInfo
 } from '@/api/orderpay'
 import Schema from 'async-validator'
-import { formatTime } from '../../../../../utils/formatTime.js'
+import {
+  formatTime
+} from '../../../../../utils/formatTime.js'
 const app = getApp()
 Page({
   data: {
@@ -38,14 +42,68 @@ Page({
       cartList: orderInfo.cartVoList,
       userAddressId: orderAddress.id
     }
-
+    console.log("params----", params)
     // 对请求参数进项验证
-    const { valid } = await this.validatorPerson(params)
+    const {
+      valid
+    } = await this.validatorPerson(params)
 
     // 打印验证结果
     console.log(valid)
-  },
 
+    // 如果验证失败，直接 return，不执行后续的逻辑处理
+    if (!valid) return
+
+    // 调用接口，创建平台订单
+    console.log("params----", params)
+    const res = await reqSubmitOrder(params)
+    console.log('res----', res)
+    // 在平台订单创建成功以后，将订单编号挂载到页面实例上
+    if (res.code === 200) {
+      // 将订单编号挂载到页面实例上
+      this.orderNo = res.data
+      this.advancePay()
+    }
+  },
+  // 获取预付单信息、支付参数
+  // 获取预付单信息、支付参数
+  async advancePay() {
+    console.log('advancePay---')
+    try {
+      const payParams = await reqPreBuyInfo(this.orderNo)
+      console.log('payParams----',payParams)
+      if (payParams.code === 200) {
+        //payParams.data 就是获取的支付参数
+        //调用  wx.requestPayment 发起微信支付
+        const payInfo = await wx.requestPayment(payParams.data)
+        console.log('支付信息',payInfo)
+        // 获取支付结果
+        if (payInfo.errMsg === 'requestPayment:ok') {
+          // 查询订单的支付状态
+          const payStatus = await reqPayStatus(this.orderNo)
+
+          if (payStatus.code === 200) {
+            wx.redirectTo({
+              url: '/pages/order/list/index',
+              success: () => {
+                wx.toast({
+                  title: '支付成功',
+                  icon: 'success'
+                })
+              }
+            })
+          }
+        }
+
+      }
+    } catch (error) {
+      console.log(error)
+      wx.toast({
+        title: '支付失败，请联系客服',
+        icon: 'error'
+      })
+    }
+  },
   // 对新增收货地址请求参数进行验证
   validatorPerson(params) {
     // 验证收货人，是否只包含大小写字母、数字和中文字符
@@ -56,16 +114,32 @@ Page({
 
     // 创建验证规则
     const rules = {
-      userAddressId: [{ required: true, message: '请选择收货地址' }],
-      buyName: [
-        { required: true, message: '请输入收货人姓名' },
-        { pattern: nameRegExp, message: '收货人姓名不合法' }
+      userAddressId: [{
+        required: true,
+        message: '请选择收货地址'
+      }],
+      buyName: [{
+          required: true,
+          message: '请输入收货人姓名'
+        },
+        {
+          pattern: nameRegExp,
+          message: '收货人姓名不合法'
+        }
       ],
-      buyPhone: [
-        { required: true, message: '请输入收货人手机号' },
-        { pattern: phoneReg, message: '收货人手机号不合法' }
+      buyPhone: [{
+          required: true,
+          message: '请输入收货人手机号'
+        },
+        {
+          pattern: phoneReg,
+          message: '收货人手机号不合法'
+        }
       ],
-      deliveryDate: { required: true, message: '请选择送达时间' }
+      deliveryDate: {
+        required: true,
+        message: '请选择送达时间'
+      }
     }
 
     // 传入验证规则进行实例化
@@ -77,12 +151,18 @@ Page({
       validator.validate(params, (errors) => {
         if (errors) {
           // 如果验证失败，需要给用户进行提示
-          wx.toast({ title: errors[0].message })
+          wx.toast({
+            title: errors[0].message
+          })
           // 如果属性值是 false，说明验证失败
-          resolve({ valid: false })
+          resolve({
+            valid: false
+          })
         } else {
           // 如果属性值是 true，说明验证成功
-          resolve({ valid: true })
+          resolve({
+            valid: true
+          })
         }
       })
     })
