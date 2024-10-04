@@ -8,7 +8,8 @@ import {
   reqCartList,
   reqUpdateChecked,
   reqCheckAllCart,
-  reqAddCart
+  reqAddCart,
+  reqDelCartGoods
 } from '@/api/cart'
 import {
   debounce
@@ -29,6 +30,19 @@ ComponentWithStore({
       return (
         data.cartList.length !== 0 && data.cartList.every((item) => item.isChecked === 1)
       )
+    },
+    // 计算商品价格总和
+    totalPrice(data) {
+      let totalPrice = 0
+
+      data.cartList.forEach((item) => {
+        // 如果商品的 isChecked 属性等于，说明该商品被选中的
+        if (item.isChecked === 1) {
+          totalPrice += item.count * item.price
+        }
+      })
+
+      return totalPrice
     }
   },
   // 组件的初始数据
@@ -158,6 +172,24 @@ ComponentWithStore({
           })
         }
       },
-      500)
+      500),
+    // 删除购物车中的商品
+    async delCartGoods(event) {
+      // 获取需要删除商品的 id
+      const {
+        id
+      } = event.currentTarget.dataset
+
+      // 询问用户是否删除该商品
+      const modalRes = await wx.modal({
+        content: '您确认删除该商品吗 ?'
+      })
+
+      if (modalRes) {
+        await reqDelCartGoods(id)
+
+        this.showTipGetList()
+      }
+    },
   }
 })

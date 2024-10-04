@@ -6,7 +6,7 @@
     bindtap="onSwipeCellPageTap"
   >
     <view class="goods-item" wx:for="{{ cartList }}" wx:key="id">
-      <van-swipe-cell class="goods-swipe" right-width="{{ 65 }}">
+      <van-swipe-cell class="goods-swipe" right-width="{{ 65 }}" id="swipe-cell-{{item.goodsId}}" bind:open="swipeCellOpen" bind:click="onSwipeCellClick">
         <van-cell-group border="{{ false }}">
           <view class="goods-info">
             <view class="left">
@@ -33,7 +33,7 @@
             </view>
           </view>
         </van-cell-group>
-        <view slot="right" class="van-swipe-cell__right">删除</view>
+        <view slot="right" class="van-swipe-cell__right" bind:tap="delCartGoods" data-id="{{item.goodsId}}">删除</view>
       </van-swipe-cell>
     </view>
   </view>
@@ -52,7 +52,7 @@
   <!-- 底部工具栏 -->
   <van-submit-bar
     wx:if="{{ cartList.length }}"
-    price="{{ 3050 }}"
+    price="{{ totalPrice }}"
     button-text="去结算"
     tip="{{ true }}"
   >
