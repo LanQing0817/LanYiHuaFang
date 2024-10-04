@@ -4,8 +4,6 @@
     "pages/category/category",
     "pages/cart/cart",
     "pages/my/my",
-    "pages/order/detail/detail",
-    "pages/order/list/list",
     "pages/login/login",
     "pages/settings/settings"
   ],
@@ -82,6 +80,14 @@
         "pages/goods/list/list",
         "pages/goods/detail/detail"
       ]
+    },
+    {
+      "root": "modules/orderPayModule",
+      "name": "orderPayModule",
+      "pages": [
+        "pages/order/detail/detail",
+        "pages/order/list/list"
+      ]
     }
   ],
   "preloadRule": {
@@ -92,6 +98,10 @@
     "pages/category/category": {
       "network": "all",
       "packages": ["goodModule"]
+    },
+    "pages/cart/cart": {
+      "network": "all",
+      "packages": ["orderPayModule"]
     }
   },
   "requiredPrivateInfos": [

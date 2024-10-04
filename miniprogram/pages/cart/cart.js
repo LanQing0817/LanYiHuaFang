@@ -191,5 +191,18 @@ ComponentWithStore({
         this.showTipGetList()
       }
     },
+    // 跳转到订单结算页面
+    toOrder() {
+      if (this.data.totalPrice === 0) {
+        wx.toast({
+          title: '请选择需要购买的商品'
+        })
+        return
+      }
+      // 跳转到订单的结算页面
+      wx.navigateTo({
+        url: '/modules/orderPayModule/pages/order/detail/detail',
+      })
+    }
   }
 })

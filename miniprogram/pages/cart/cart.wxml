@@ -52,9 +52,10 @@
   <!-- 底部工具栏 -->
   <van-submit-bar
     wx:if="{{ cartList.length }}"
-    price="{{ totalPrice }}"
+    price="{{ totalPrice * 100 }}"
     button-text="去结算"
     tip="{{ true }}"
+    bindsubmit="toOrder"
   >
     <van-checkbox value="{{ selectAllStatus }}" checked-color="#FA4126" bind:change="changeAllStatus"> 全选 </van-checkbox>
   </van-submit-bar>
