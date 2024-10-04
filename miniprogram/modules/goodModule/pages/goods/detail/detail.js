@@ -1,7 +1,10 @@
 import {
   reqGoodsInfo
 } from '../../../../../api/good'
+import { userBehavior } from '@/behaviors/userBehavior'
+
 Page({
+  behaviors: [userBehavior],
   // 页面的初始数据
   data: {
     goodsInfo: {}, // 商品详情
