@@ -14,6 +14,7 @@
     "async-validator": "^4.2.5",
     "mina-request": "^1.0.8",
     "miniprogram-computed": "^5.0.0",
+    "miniprogram-licia": "^1.42.0",
     "mobx-miniprogram": "^6.12.3",
     "mobx-miniprogram-bindings": "^4.0.0"
   }

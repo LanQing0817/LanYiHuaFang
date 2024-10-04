@@ -10,7 +10,9 @@ import {
   reqCheckAllCart,
   reqAddCart
 } from '@/api/cart'
-
+import {
+  debounce
+} from 'miniprogram-licia'
 const computedBehavior = require('miniprogram-computed').behavior
 
 ComponentWithStore({
@@ -109,53 +111,53 @@ ComponentWithStore({
         })
       }
     },
-    async changeBuyNum(event) {
-      console.log('changeBuyNum----')
-      // 获取最新的购买数量，
-      // 如果用户输入的值大于 200，购买数量需要重置为 200
-      // 如果不大于 200，直接返回用户输入的值
-      let buynum = event.detail > 200 ? 200 : event.detail
-      // 获取商品的 ID 和 索引
-      const {
-        id: goodsId,
-        index,
-        oldbuynum
-      } = event.target.dataset
+    changeBuyNum: debounce(async function (event) {
+        console.log('changeBuyNum----')
+        // 获取最新的购买数量，
+        // 如果用户输入的值大于 200，购买数量需要重置为 200
+        // 如果不大于 200，直接返回用户输入的值
+        let buynum = event.detail > 200 ? 200 : event.detail
+        // 获取商品的 ID 和 索引
+        const {
+          id: goodsId,
+          index,
+          oldbuynum
+        } = event.target.dataset
 
-      // 验证用户输入的值，是否是 1 ~ 200 直接的正整数
-      const reg = /^([1-9]|[1-9]\d|1\d{2}|200)$/
+        // 验证用户输入的值，是否是 1 ~ 200 直接的正整数
+        const reg = /^([1-9]|[1-9]\d|1\d{2}|200)$/
 
-      // 对用户输入的值进行验证
-      const regRes = reg.test(buynum)
+        // 对用户输入的值进行验证
+        const regRes = reg.test(buynum)
 
-      // 如果验证没有通过，需要重置为之前的购买数量
-      if (!regRes) {
-        this.setData({
-          [`cartList[${index}].count`]: oldbuynum
+        // 如果验证没有通过，需要重置为之前的购买数量
+        if (!regRes) {
+          this.setData({
+            [`cartList[${index}].count`]: oldbuynum
+          })
+
+          return
+        }
+
+        // 如果通过，需要计算差值，然后将差值发送给服务器，让服务器进行逻辑处理
+        const disCount = buynum - oldbuynum
+
+        // 如果购买数量没有发生改变，不发送请求
+        if (disCount === 0) return
+
+        // 发送请求：购买的数量 和 差值
+        const res = await reqAddCart({
+          goodsId,
+          count: disCount
         })
 
-        return
-      }
-
-      // 如果通过，需要计算差值，然后将差值发送给服务器，让服务器进行逻辑处理
-      const disCount = buynum - oldbuynum
-
-      // 如果购买数量没有发生改变，不发送请求
-      if (disCount === 0) return
-
-      // 发送请求：购买的数量 和 差值
-      const res = await reqAddCart({
-        goodsId,
-        count: disCount
-      })
-
-      // 服务器更新购买数量成功以后，更新本地的数据
-      if (res.code === 200) {
-        this.setData({
-          [`cartList[${index}].count`]: buynum
-        })
-      }
-    }
-  },
-
+        // 服务器更新购买数量成功以后，更新本地的数据
+        if (res.code === 200) {
+          this.setData({
+            [`cartList[${index}].count`]: buynum
+          })
+        }
+      },
+      500)
+  }
 })
